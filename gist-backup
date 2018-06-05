@@ -104,14 +104,14 @@ backup() {
 
 page=1
 retries=0
-MAX_RETRIES=5
+MAX_RETRIES=3
 while [ $retries -lt $MAX_RETRIES ]
 do
   echo "Requesting Gist page: $page from $url"
 
   gists=$(
   curl -s -H "Authorization: token $token" -d "page=$page" -G $url |
-  sed -n 's/.*git_pull_url": "\(.*\)",/\1/p'
+  ack --output='$1' 'git_pull_url":"(.*?)",'
   )
 
   if [ -z "$gists" ]
